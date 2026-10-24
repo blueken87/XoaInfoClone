@@ -1,0 +1,10 @@
+Package: com.ienthach.XoaInfo
+Name: Xoa Info (clone)
+Version: 2.16.4-1
+Architecture: iphoneos-arm64
+Depends: firmware (>= 15.0), mobilesubstrate, gzip, ldid, libplist3
+Description: Xoa Info clone (license check patched)
+Homepage: https://XoaInfo.com/
+Maintainer: local
+Author: Nguyen Quang Vu (ienthach)
+Section: Utilities

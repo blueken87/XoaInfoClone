@@ -1,0 +1,4 @@
+#!/bin/bash
+
+launchctl unload -w /Library/LaunchDaemons/com.ienthach.XoaInfoD.plist >/dev/null 2>&1
+exit 0

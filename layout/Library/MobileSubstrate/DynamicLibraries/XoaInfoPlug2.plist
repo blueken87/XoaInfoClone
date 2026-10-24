@@ -1,0 +1,11 @@
+{
+	Filter = {
+		Executables = (
+			pasted,
+			lsd,
+		);
+		Bundles = (
+			"com.apple.springboard",
+		);
+	};
+}

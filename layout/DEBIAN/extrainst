@@ -1,0 +1,8 @@
+#!/bin/bash
+launchctl load -w /Library/LaunchDaemons/com.ienthach.XoaInfoD.plist  >/dev/null 2>&1
+
+killall -9 akd appstored atc accountsd itunescloudd itunesstored mobileactivationd 
+
+uicache -a
+
+exit 0

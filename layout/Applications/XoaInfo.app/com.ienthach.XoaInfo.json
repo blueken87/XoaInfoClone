@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>FromModel</key>
+	<integer>26</integer>
+	<key>FromVersion</key>
+	<integer>78</integer>
+	<key>ListAppReset</key>
+	<array>
+		<string>com.apple.mobilesafari</string>
+	</array>
+	<key>ToModel</key>
+	<integer>40</integer>
+	<key>ToVersion</key>
+	<integer>122</integer>
+	<key>fakeUDID</key>
+	<string>e174ce1032a54d2b6bfdb34aa9f79483335bb14e</string>
+	<key>memoryC</key>
+	<string>NO</string>
+	<key>optionBlockUDP</key>
+	<string>YES</string>
+	<key>optionBlockWebGL</key>
+	<string>YES</string>
+	<key>optionBlockWebRTC</key>
+	<string>YES</string>
+	<key>optionDeleteAppReceipt</key>
+	<string>YES</string>
+	<key>optionOnOffAllow</key>
+	<string>YES</string>
+	<key>optionRandomCarrier</key>
+	<string>YES</string>
+	<key>optionResetApps</key>
+	<string>YES</string>
+	<key>optionResetSys</key>
+	<string>YES</string>
+	<key>optionRespring</key>
+	<string>NO</string>
+	<key>optionTatApp1Lan</key>
+	<string>NO</string>
+	<key>optionTatPushNoti</key>
+	<string>YES</string>
+	<key>optionVPNProxy</key>
+	<string>YES</string>
+</dict>
+</plist>

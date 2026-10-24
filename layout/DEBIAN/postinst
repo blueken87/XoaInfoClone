@@ -1,0 +1,18 @@
+#!/usr/bin/sh
+
+chown 0:0 /var/jb/Applications/XoaInfo.app/XoaInfo
+chmod 755 /var/jb/Applications/XoaInfo.app/XoaInfo
+chmod +s /var/jb/Applications/XoaInfo.app/XoaInfo
+
+chown 0:0 /var/jb/usr/libexec/XoaInfoD
+chmod 755 /var/jb/usr/libexec/XoaInfoD
+chmod +s /var/jb/usr/libexec/XoaInfoD
+
+chown root:wheel /var/jb/Library/LaunchDaemons/com.ienthach.XoaInfoD.plist
+launchctl load -w /var/jb/Library/LaunchDaemons/com.ienthach.XoaInfoD.plist  >/dev/null 2>&1
+
+if ! test -f /var/mobile/Library/Preferences/com.ienthach.XoaInfoConfig.plist; then
+	echo "không có file cấu hình"
+	cp /var/jb/Applications/XoaInfo.app/com.ienthach.XoaInfo.json /var/mobile/Library/Preferences/com.ienthach.XoaInfoConfig.plist
+fi
+killall -9 lsd
