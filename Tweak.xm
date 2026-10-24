@@ -1,74 +1,41 @@
 #import <Foundation/Foundation.h>
 #import <substrate.h>
 
-static void XIPSetLike(NSMutableDictionary *dict, NSString *key, id numberValue, id stringValue) {
-    id current = dict[key];
-    if ([current isKindOfClass:[NSNumber class]]) {
-        dict[key] = numberValue;
-    } else if (current != nil) {
-        dict[key] = stringValue;
-    }
+static NSString *XIPReplacement(NSString *item) {
+    if ([item hasPrefix:@"expDate:"]) return @"expDate:2099-12-31 23:59:59";
+    if ([item hasPrefix:@"phase:"]) return @"phase:9";
+    if ([item hasPrefix:@"retention:"]) return @"retention:99999";
+    if ([item hasPrefix:@"deleteList:"]) return @"deleteList:";
+    if ([item hasPrefix:@"message:"]) return @"message:ok";
+    if ([item hasPrefix:@"code:"] || [item isEqualToString:@"code"]) return @"code:0";
+    return nil;
 }
 
-static void XIPForceLicensed(NSMutableDictionary *dict) {
-    XIPSetLike(dict, @"code", @0, @"0");
-    XIPSetLike(dict, @"success", @YES, @"1");
-    XIPSetLike(dict, @"phase", @9, @"9");
-    XIPSetLike(dict, @"retention", @99999, @"99999");
-    dict[@"message"] = @"ok";
-    dict[@"expDate"] = @"2099-12-31 23:59:59";
-}
-
-static NSMutableDictionary *XIPParseDelimited(NSData *data) {
-    NSString *raw = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    if (raw == nil) return nil;
-    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-    for (NSString *pair in [raw componentsSeparatedByString:@"|<>|"]) {
-        NSRange colon = [pair rangeOfString:@":"];
-        if (colon.location == NSNotFound) continue;
-        NSString *key = [[pair substringToIndex:colon.location]
-                         stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-        NSString *value = [[pair substringFromIndex:colon.location + 1]
-                           stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-        if (key.length) dict[key] = value;
+%hook NSString
+- (NSArray *)componentsSeparatedByString:(NSString *)separator {
+    NSArray *original = %orig;
+    if (![separator isEqualToString:@"|<>|"] || ![self containsString:@"expDate:"]) {
+        return original;
     }
-    return dict.count ? dict : nil;
-}
 
-%hook NSJSONSerialization
-+ (id)JSONObjectWithData:(NSData *)data options:(NSJSONReadingOptions)options error:(NSError **)error {
-    id object = %orig;
-    @try {
-        NSString *raw = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        BOOL isLicence = NO;
-        if (raw != nil && ([raw rangeOfString:@"loginipX2.1"].location != NSNotFound ||
-                           [raw rangeOfString:@"redeemcode"].location != NSNotFound ||
-                           [raw rangeOfString:@"expDate"].location != NSNotFound)) {
-            isLicence = YES;
+    NSLog(@"[XoaInfoPatch] licence raw=%@", self);
+
+    NSMutableArray *result = [NSMutableArray arrayWithCapacity:original.count + 1];
+    BOOL hasCode = NO;
+    for (NSString *item in original) {
+        if (![item isKindOfClass:[NSString class]]) { [result addObject:item]; continue; }
+        NSString *replacement = XIPReplacement(item);
+        if (replacement != nil) {
+            [result addObject:replacement];
+            if ([item hasPrefix:@"code"] || [item isEqualToString:@"code"]) hasCode = YES;
+        } else {
+            [result addObject:item];
         }
-        if (!isLicence && [object isKindOfClass:[NSDictionary class]] &&
-            ((NSDictionary *)object)[@"expDate"] != nil) {
-            isLicence = YES;
-        }
-        if (!isLicence) return object;
-
-        NSLog(@"[XoaInfoPatch] licence raw=%@", raw ?: @"(non-utf8)");
-
-        NSMutableDictionary *dict = nil;
-        if ([object isKindOfClass:[NSDictionary class]]) {
-            dict = [object mutableCopy];
-        } else if (raw != nil) {
-            dict = XIPParseDelimited(data);
-        }
-        if (dict == nil) return object;
-
-        XIPForceLicensed(dict);
-        NSLog(@"[XoaInfoPatch] patched=%@", dict);
-        return dict;
-    } @catch (NSException *exception) {
-        NSLog(@"[XoaInfoPatch] exception %@", exception);
-        return object;
     }
+    if (!hasCode) [result addObject:@"code:0"];
+
+    NSLog(@"[XoaInfoPatch] licence patched=%@", [result componentsJoinedByString:@"|<>|"]);
+    return result;
 }
 %end
 
