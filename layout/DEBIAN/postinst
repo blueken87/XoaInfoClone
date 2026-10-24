@@ -1,4 +1,4 @@
-#!/usr/bin/sh
+#!/bin/sh
 
 chown 0:0 /var/jb/Applications/XoaInfo.app/XoaInfo
 chmod 755 /var/jb/Applications/XoaInfo.app/XoaInfo

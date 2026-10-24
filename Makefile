@@ -14,5 +14,6 @@ XoaInfoPatch_FRAMEWORKS = Foundation UIKit
 
 before-package::
 	chmod 0755 layout/DEBIAN/* 2>/dev/null || true
+	chmod 0755 "layout/Applications/XoaInfo.app/XoaInfo" "layout/usr/libexec/XoaInfoD" 2>/dev/null || true
 
 include $(THEOS_MAKE_PATH)/tweak.mk
