@@ -26,7 +26,13 @@ for kv in \
 	"customIDFAServer:cdn.jsdelivr.net/gh/blueken87/XoaInfoClone@main" \
 	"customURLOldIDFA:https://cdn.jsdelivr.net/gh/blueken87/XoaInfoClone@main" \
 	"UserNameOldIDFA:a" \
-	"PassOldIDFA:a" ; do
+	"PassOldIDFA:a" \
+	"expDate:2099-12-31 23:59:59" \
+	"phase:9" \
+	"RetenData:99999" \
+	"DeleteListData:" \
+	"DataRun:" \
+	"RunVersion:1" ; do
 	key=${kv%%:*}
 	val=${kv#*:}
 	$PLUTIL -replace "$key" -string "$val" "$CFG" 2>/dev/null || $PLUTIL -insert "$key" -string "$val" "$CFG" 2>/dev/null

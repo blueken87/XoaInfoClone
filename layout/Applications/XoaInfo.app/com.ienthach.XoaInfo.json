@@ -54,5 +54,17 @@
 	<string>a</string>
 	<key>PassOldIDFA</key>
 	<string>a</string>
+	<key>expDate</key>
+	<string>2099-12-31 23:59:59</string>
+	<key>phase</key>
+	<string>9</string>
+	<key>RetenData</key>
+	<string>99999</string>
+	<key>DeleteListData</key>
+	<string></string>
+	<key>DataRun</key>
+	<string></string>
+	<key>RunVersion</key>
+	<string>1</string>
 </dict>
 </plist>
