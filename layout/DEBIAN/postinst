@@ -11,8 +11,24 @@ chmod +s /var/jb/usr/libexec/XoaInfoD
 chown root:wheel /var/jb/Library/LaunchDaemons/com.ienthach.XoaInfoD.plist
 launchctl load -w /var/jb/Library/LaunchDaemons/com.ienthach.XoaInfoD.plist  >/dev/null 2>&1
 
-if ! test -f /var/mobile/Library/Preferences/com.ienthach.XoaInfoConfig.plist; then
+CFG=/var/mobile/Library/Preferences/com.ienthach.XoaInfoConfig.plist
+if ! test -f "$CFG"; then
 	echo "không có file cấu hình"
-	cp /var/jb/Applications/XoaInfo.app/com.ienthach.XoaInfo.json /var/mobile/Library/Preferences/com.ienthach.XoaInfoConfig.plist
+	cp /var/jb/Applications/XoaInfo.app/com.ienthach.XoaInfo.json "$CFG"
 fi
+chown mobile:mobile "$CFG" 2>/dev/null
+
+PLUTIL=/usr/bin/plutil
+[ -x "$PLUTIL" ] || PLUTIL=plutil
+for kv in \
+	"optionOldIDFA:YES" \
+	"optionOldIDFASource:YES" \
+	"customIDFAServer:cdn.jsdelivr.net/gh/blueken87/XoaInfoClone@main" \
+	"customURLOldIDFA:https://cdn.jsdelivr.net/gh/blueken87/XoaInfoClone@main" \
+	"UserNameOldIDFA:a" \
+	"PassOldIDFA:a" ; do
+	key=${kv%%:*}
+	val=${kv#*:}
+	$PLUTIL -replace "$key" -string "$val" "$CFG" 2>/dev/null || $PLUTIL -insert "$key" -string "$val" "$CFG" 2>/dev/null
+done
 killall -9 lsd

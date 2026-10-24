@@ -42,5 +42,17 @@
 	<string>YES</string>
 	<key>optionVPNProxy</key>
 	<string>YES</string>
+	<key>optionOldIDFA</key>
+	<string>YES</string>
+	<key>optionOldIDFASource</key>
+	<string>YES</string>
+	<key>customIDFAServer</key>
+	<string>cdn.jsdelivr.net/gh/blueken87/XoaInfoClone@main</string>
+	<key>customURLOldIDFA</key>
+	<string>https://cdn.jsdelivr.net/gh/blueken87/XoaInfoClone@main</string>
+	<key>UserNameOldIDFA</key>
+	<string>a</string>
+	<key>PassOldIDFA</key>
+	<string>a</string>
 </dict>
 </plist>
