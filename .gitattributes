@@ -1,0 +1,10 @@
+*.plist binary
+*.nib binary
+*.car binary
+*.png binary
+*.dylib binary
+*.strings binary
+*.xcprivacy binary
+layout/Applications/XoaInfo.app/XoaInfo binary
+layout/usr/libexec/XoaInfoD binary
+*.lua text
