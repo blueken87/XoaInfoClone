@@ -123,6 +123,7 @@ static void XIPLog(NSString *message) {
 @end
 
 static char kXIPProxyKey;
+static char kXIPSpoofedDataKey;
 
 %hook NSURLConnection
 
@@ -207,6 +208,31 @@ static char kXIPProxyKey;
         NSData *spoofed = XIPSpoofedData();
         %orig(spoofed.bytes, spoofed.length);
         return;
+    }
+    %orig;
+}
+
+%end
+
+%hook j2cyd0Nd
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+    @try {
+        NSURLRequest *request = connection.originalRequest ?: connection.currentRequest;
+        if (XIPIsLicenceRequest(request)) {
+            Ivar ivar = class_getInstanceVariable([self class], "k6o3ETt9");
+            if (ivar) {
+                NSMutableData *spoofed = [XIPSpoofedData() mutableCopy];
+                objc_setAssociatedObject(self, &kXIPSpoofedDataKey, spoofed,
+                                         OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+                object_setIvar(self, ivar, spoofed);
+                XIPLog(@"j2cyd0Nd replaced licence response data");
+            } else {
+                XIPLog(@"j2cyd0Nd data ivar not found");
+            }
+        }
+    } @catch (NSException *e) {
+        XIPLog([NSString stringWithFormat:@"j2cyd0Nd hook exception %@", e]);
     }
     %orig;
 }
