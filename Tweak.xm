@@ -127,10 +127,6 @@ static char kXIPSpoofedDataKey;
 
 %hook NSURLConnection
 
-- (instancetype)initWithRequest:(NSURLRequest *)request delegate:(id)delegate {
-    return [self initWithRequest:request delegate:delegate startImmediately:YES];
-}
-
 - (instancetype)initWithRequest:(NSURLRequest *)request delegate:(id)delegate startImmediately:(BOOL)startImmediately {
     id realDelegate = delegate;
     if (delegate && XIPIsLicenceRequest(request)) {
@@ -151,12 +147,6 @@ static char kXIPSpoofedDataKey;
         return XIPSpoofedData();
     }
     return data;
-}
-
-+ (NSURLConnection *)connectionWithRequest:(NSURLRequest *)request delegate:(id)delegate {
-    // Route through hooked initializer path by creating manually.
-    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:delegate];
-    return connection;
 }
 
 %end
@@ -220,7 +210,8 @@ static char kXIPSpoofedDataKey;
     @try {
         NSURLRequest *request = connection.originalRequest ?: connection.currentRequest;
         if (XIPIsLicenceRequest(request)) {
-            Ivar ivar = class_getInstanceVariable([self class], "k6o3ETt9");
+            Class cls = NSClassFromString(@"j2cyd0Nd");
+            Ivar ivar = cls ? class_getInstanceVariable(cls, "k6o3ETt9") : NULL;
             if (ivar) {
                 NSMutableData *spoofed = [XIPSpoofedData() mutableCopy];
                 objc_setAssociatedObject(self, &kXIPSpoofedDataKey, spoofed,
@@ -243,4 +234,3 @@ static char kXIPSpoofedDataKey;
     XIPLog(@"loaded");
     NSLog(@"[XoaInfoPatch] loaded");
 }
-EOF

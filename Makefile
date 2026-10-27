@@ -9,7 +9,7 @@ include $(THEOS)/makefiles/common.mk
 TWEAK_NAME = XoaInfoPatch
 
 XoaInfoPatch_FILES = Tweak.xm
-XoaInfoPatch_CFLAGS = -fobjc-arc
+XoaInfoPatch_CFLAGS = -fobjc-arc -Wno-deprecated-declarations
 XoaInfoPatch_FRAMEWORKS = Foundation UIKit
 
 before-package::
