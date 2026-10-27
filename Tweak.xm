@@ -127,5 +127,3 @@ static void XIPLog(NSString *message) {
     XIPLog(@"loaded");
     NSLog(@"[XoaInfoPatch] loaded");
 }
-EOF
-git add -A; git commit -m "Robust licence response spoof via NSString/NSMutableData hooks" 2>&1 | tail -1; git push 2>&1 | tail -2
